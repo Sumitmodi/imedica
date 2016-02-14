@@ -1,0 +1,1 @@
+<?php load_module_part("why_choose_us", "list", "why_choose_us");?>

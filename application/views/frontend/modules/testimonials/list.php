@@ -1,0 +1,1 @@
+<?php load_module_part("testimonials", "list", "testimonials");?>
