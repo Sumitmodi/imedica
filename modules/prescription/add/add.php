@@ -58,8 +58,10 @@ class PrescriptionAdd extends MY_Controller
         if (($last_id != NULL) || ($this->input->post('own_id'))){
             $prescription_data = array(
                 'medicine' => implode(';', $this->input->post("medicine")),
+                'quantity' => implode(';', $this->input->post("quantity")),
                 'disease' => $this->input->post("disease"),
                 'prescribed_by' => $this->input->post("doctor"),
+                'hospital_name' => $this->input->post("hospital"),
                 'dose' => implode(';', $this->input->post("dose"))
             );
             if ($this->input->post('own_id')) {

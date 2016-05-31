@@ -1,6 +1,6 @@
 <div class="block full">
     <div class="block-title">
-        <h2>Order Table</h2>
+        <h2>Reoccuring Orders</h2>
     </div>
 
     <?php if ($this->session->flashdata('message')) { ?>
@@ -22,7 +22,6 @@
                 <th>Reoccuring Interval</th>
                 <th>Placed On</th>
                 <th>Status</th>
-                <th>Prescription File</th>
                 <th class="text-center" style="width: 125px;"><i class="fa fa-flash"></i></th>
             </tr>
             </thead>
@@ -57,14 +56,14 @@
                     </td><?php } elseif ($row->status == 6){ ?>
                     <td class="hidden-sm hidden-xs text-center"><a href="javascript:void(0)" class="label label-danger">On the way to Delivery</a>
                     </td><?php } ?>
-                <td><a href="<?php echo base_url('user/download/?name='.$pres[0]->prescription);?>"><?php echo $pres[0]->prescription;?></a></td>
+<!--                <td><a href="--><?php //echo base_url('user/download/?name='.$pres[0]->prescription);?><!--">--><?php //echo $pres[0]->prescription;?><!--</a></td>-->
                 <td class="text-center">
                     <a href="#modal-fade" title="view_order" class="btn btn-effect-ripple btn-xs btn-info view-modal"
                        data-toggle="modal" data-id="<?php echo $row->id; ?>" data-disease="<?php echo $row->disease; ?>"
                        data-reoccuring_interval="<?php echo $row->reoccuring_interval; ?>" data-prescribed_by="<?php echo $pres[0]->prescribed_by; ?>"
                        data-medicine="<?php echo $pres[0]->medicine; ?>" data-dose="<?php echo $pres[0]->dose; ?>"
                        data-hospital="<?php echo $pres[0]->hospital_name; ?>" data-date="<?php echo $row->date; ?>"
-                       data-patient="<?php echo $data[0]->patient; ?>" data-status="<?php echo $row->status; ?>">
+                       data-patient="<?php echo $data[0]->patient; ?>" data-status="<?php echo $row->status; ?>" data-prescription_file="<?php echo $pres[0]->prescription; ?>">
                         <i class="fa fa-eye"></i>
                     </a>
                     <?php if($row->status < 2){?>
@@ -127,6 +126,10 @@
                                 <td id="date"></td>
                             </tr>
                             <tr>
+                                <td>Prescription File/td>
+                                <td id="prescription_file"></td>
+                            </tr>
+                            <tr>
                                 <td>Status</td>
                                 <td id="status"></td>
                             </tr>
@@ -174,6 +177,7 @@
             var dose = $(this).attr('data-dose');
             var reoccuring_interval = $(this).attr('data-reoccuring_interval');
             var prescribed_by = $(this).attr('data-prescribed_by');
+            var prescription_file = $(this).attr('data-prescription_file');
             var hospital = $(this).attr('data-hospital');
             var date = $(this).attr('data-date');
             var status = $(this).attr('data-status');
@@ -185,6 +189,7 @@
             $('td#dose').html(dose);
             $('td#reoccuring_interval').html(reoccuring_interval);
             $('td#prescribed_by').html(prescribed_by);
+            $('td#prescription_file').html(prescription_file);
             $('td#hospital').html(hospital);
             $('td#date').html(date);
             if (status == 1) {

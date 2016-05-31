@@ -1,6 +1,6 @@
 <div class="block full">
     <div class="block-title">
-        <h2>Your Order Table</h2>
+        <h2>Your Orders</h2>
     </div>
 
     <?php if ($this->session->flashdata('message')) { ?>
@@ -33,8 +33,10 @@
             ?>
             <tr>
                 <td class="text-center"><?php echo $k + 1; ?></td>
-                <td><?php $data = $this->user_model->table_fetch_row('patient',array('id'=>$row->patient));
-                    echo $data[0]->patient; ?></td>
+                <td><a href="#modal-large" data-toggle="modal" title="View Order History" class="pat_hist_id"
+                       style="text-decoration: none;"
+                       data-id="<?php echo $row->patient; ?>"><?php $data = $this->user_model->table_fetch_row('patient', array('id' => $row->patient));
+                        echo $data[0]->patient; ?> </a></td>
                 <td><?php echo $row->disease; ?></td>
                 <td class="text-center"><?php if ($row->reoccuring_order == 1) { ?>
                         <i class="fa fa-check"></i><?php echo "&nbsp;&nbsp;" . $row->reoccuring_interval . " days";
@@ -42,7 +44,7 @@
                         <i class="fa fa-times"></i> <?php } ?>
                 </td>
                 <td><?php echo $row->date; ?></td>
-                <?php $pres = $this->user_model->table_fetch_row('prescribed_medicine',array('patient'=>$row->patient,'disease'=>$row->disease)); ?>
+                <?php $pres = $this->user_model->table_fetch_row('prescribed_medicine', array('patient' => $row->patient, 'disease' => $row->disease)); ?>
 
                 <?php if ($row->status == 1) { ?>
                     <td class="hidden-sm hidden-xs text-center"><a href="javascript:void(0)"
@@ -57,23 +59,32 @@
                                                                    class="label label-warning">Denied</a>
                     </td><?php } elseif ($row->status == 5) { ?>
                     <td class="hidden-sm hidden-xs text-center"><a href="javascript:void(0)" class="label label-danger">Cancelled</a>
-                    </td><?php } elseif ($row->status == 6){ ?>
-                    <td class="hidden-sm hidden-xs text-center"><a href="javascript:void(0)" class="label label-danger">On the way to Delivery</a>
+                    </td><?php } elseif ($row->status == 6) { ?>
+                    <td class="hidden-sm hidden-xs text-center"><a href="javascript:void(0)" class="label label-danger">On
+                            the way to Delivery</a>
                     </td><?php } ?>
 
                 <td class="text-center">
                     <a href="#modal-fade" title="view_order" class="btn btn-effect-ripple btn-xs btn-info view-modal"
                        data-toggle="modal" data-id="<?php echo $row->id; ?>" data-disease="<?php echo $row->disease; ?>"
-                       data-reoccuring_order="<?php if($row->reoccuring_order==1){echo "YES";}else{echo "NO";} ?>"
-                       data-reoccuring_interval="<?php echo $row->reoccuring_interval; ?>" data-prescribed_by="<?php echo $pres[0]->prescribed_by; ?>"
+                       data-reoccuring_order="<?php if ($row->reoccuring_order == 1) {
+                           echo "YES";
+                       } else {
+                           echo "NO";
+                       } ?>"
+                       data-reoccuring_interval="<?php echo $row->reoccuring_interval; ?>"
+                       data-prescribed_by="<?php echo $pres[0]->prescribed_by; ?>"
                        data-medicine="<?php echo $pres[0]->medicine; ?>" data-dose="<?php echo $pres[0]->dose; ?>"
                        data-hospital="<?php echo $pres[0]->hospital_name; ?>" data-date="<?php echo $row->date; ?>"
                        data-patient="<?php echo $data[0]->patient; ?>" data-status="<?php echo $row->status; ?>"
                        data-prescription_file="<?php echo $pres[0]->prescription;; ?>">
                         <i class="fa fa-eye"></i>
                     </a>
-                    <?php if($row->status < 2){?>
-                        <a href="#" data-href="<?php echo base_url('user/cancel_order?id='.$row->id);?>" data-toggle="modal" data-name="<?php echo $row->disease; ?>" title="cancel_order" data-target="#confirm-cancel" class="btn btn-effect-ripple btn-xs btn-danger cancel-order"><i class="fa fa-times"></i></a>
+                    <?php if ($row->status < 2) { ?>
+                        <a href="#" data-href="<?php echo base_url('user/cancel_order?id=' . $row->id); ?>"
+                           data-toggle="modal" data-name="<?php echo $row->disease; ?>" title="cancel_order"
+                           data-target="#confirm-cancel" class="btn btn-effect-ripple btn-xs btn-danger cancel-order"><i
+                                class="fa fa-times"></i></a>
                     <?php } ?>
                 </td>
             </tr>
@@ -150,12 +161,51 @@
                 </div>
             </div>
             <div class="modal-footer">
-<!--                <a href="--><?php ////echo base_url('user/download/?name='.$pres[0]->prescription);?><!--"><button type="button" class="btn btn-effect-ripple btn-info" id="download">Download Prescription file</button></a>-->
+                <!--                <a href="-->
+                <?php ////echo base_url('user/download/?name='.$pres[0]->prescription);?><!--"><button type="button" class="btn btn-effect-ripple btn-info" id="download">Download Prescription file</button></a>-->
                 <button type="button" class="btn btn-effect-ripple btn-danger" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
+
+<div id="modal-large" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="width:95%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="modal-title"><strong>Order History</strong></h3>
+            </div>
+            <div class="modal-body">
+                <div class="box span3">
+                    <div class="box-content">
+                        <table class="table table-bordered order_hist">
+
+                            <thead>
+                            <th class="text-center" style="width: 100px;">Serial No</th>
+                            <th>Prescription</th>
+                            <th>Placed On</th>
+                            <th>Reoccuring Order</th>
+                            <th>Reoccured On</th>
+                            <th>Cancelled On</th>
+                            <th>Denied On</th>
+                            <th>Delivered On</th>
+                            <th>Status</th>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-effect-ripple btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <div id="confirm-cancel" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-sm">
@@ -212,9 +262,9 @@
                 $('td#status').text("Processed");
             } else if (status = 4) {
                 $('td#status').text("Denied");
-            }else if (status = 5) {
+            } else if (status = 5) {
                 $('td#status').text("Cancelled");
-            }else if (status = 6) {
+            } else if (status = 6) {
                 $('td#status').text("On the way to Delivery");
             }
         })
@@ -230,6 +280,45 @@
     $('#confirm-cancel').on('show.bs.modal', function (e) {
         $(this).find('.btn-danger').attr('href', $(e.relatedTarget).data('href'));
     });
+
+    $(".pat_hist_id").click(function (event) {
+        var id = $(this).attr('data-id');
+        $.ajax({
+            url: '<?php echo base_url("user/order_history");?>',
+            type: "post",
+            data: {pid: id},
+            dataType: 'json',
+            success: function (data) {
+                var table = $('.order_hist').children('tbody');
+                table.empty();
+                $.each(data, function (index, item) {
+                    sn = index + 1;
+                    if (item.reoccuring_order == 1) {
+                        reoccuring_order = 'Yes';
+                    } else {
+                        reoccuring_order = 'No';
+                    }
+                    if (item.status == 1) {
+                        status = 'Placed';
+                    } else if (item.status == 2) {
+                        status = 'Processing';
+                    } else if (item.status == 3) {
+                        status = 'Processed';
+                    } else if (item.status == 4) {
+                        status = 'Denied'
+                    } else if (item.status == 5) {
+                        status = 'Cancelled'
+                    } else if (item.status == 6) {
+                        status = 'On the way to Delivery'
+                    }
+
+                    html = '<tr><td>' + sn + '</td><td>' + item.disease + '</td><td>' + item.order_date + '</td><td>' + reoccuring_order + '</td><td>' + item.reoccured_date + '</td><td>' + item.cancelled_date + '</td><td>' + item.denied_date + '</td><td>' + item.delivered_date + '</td><td>' + status + '</td></tr>';
+                    $(table).append(html);
+                });
+            }
+        });
+    });
+
 </script>
 
 

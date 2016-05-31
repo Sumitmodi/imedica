@@ -28,7 +28,7 @@
 
     <form name="cms_page" action="" method="post" class="form-horizontal form-bordered" enctype="multipart/form-data" >
         <div class="form-group">
-            <label class="col-xs-4 control-label" for="medicine">Place an Order For </label>
+            <label class="col-xs-4 control-label" for="patient">Place an Order For </label>
             <div class="col-xs-6">
                 <div class="input-group">
                     <select id="patient" name="patient" class="form-control" size="1">
@@ -52,12 +52,12 @@
                     </select>
                     <span class="input-group-addon"><i class="fa fa-users"></i></span>
                 </div>
-                <div style="margin-top: 10px;">Click <a href="javascript:void(0)" style="text-decoration: none;" class="popup" onclick="popup()">here </a> to Add New Member</div>
+                <div style="margin-top: 10px;">Click <a href="#modal-tabs" style="text-decoration:none;" title="add_people" class="add-pres" data-toggle="modal">here </a> to Add Person</div>
             </div>
         </div>
 
         <div class="form-group">
-            <label class="col-xs-4 control-label" for="disease">Select Prescription For </label>
+            <label class="col-xs-4 control-label" for="disease">Select Prescription </label>
             <div class="col-xs-6">
                 <div class="input-group">
                     <select id="disease" name="disease" class="form-control" size="1">
@@ -65,8 +65,7 @@
                     </select>
                     <span class="input-group-addon"><i class="fa fa-bomb"></i></span>
                 </div>
-<!--                <div style="margin-top: 10px;">Click <a href="--><?php //echo base_url('user/prescription/add');?><!--">here </a> to Add Prescription</div>-->
-                <div style="margin-top: 10px;">Click <a href="javascript:void(0)" style="text-decoration: none;" class="popup" onclick="popup()">here </a> to Add Prescription</div>
+                <div style="margin-top: 10px;">Click <a href="#modal-tabs" style="text-decoration:none;" title="add_prescription" class="add-pres" data-toggle="modal">here </a> to Add Prescription</div>
             </div>
         </div>
 
@@ -83,7 +82,7 @@
 
         <div id="reoccuring" style="display:none;">
         <div class="form-group">
-            <label class="col-xs-4 control-label" for="name">Re-occuring Interval <br>(in days)
+            <label class="col-xs-4 control-label" for="reoccuring_interval">Re-occuring Interval <br>(in days)
                 &nbsp;<a href="#modal-fade" style="text-decoration:none;" title="view_info" class="view-modal" data-info="<?php echo $this->lang->line('reoccuring_interval');?>" data-toggle="modal">
                     <span class="label label-info">
                     <i class="fa fa-info-circle"></i></span></a></label>
@@ -123,7 +122,7 @@
         <div class="form-group form-actions">
             <div class="col-xs-4"></div>
             <div class="col-xs-4">
-                <button type="submit" id="submit" class="btn btn-effect-ripple btn-primary">Place Order</button>
+                <button type="submit" name="place_order" id="submit" class="btn btn-effect-ripple btn-primary">Place Order</button>
                 <button href="<?php echo base_url('user/user_order/add');?>" type="reset" class="btn btn-effect-ripple btn-danger">Reset</button>
             </div>
         </div>
@@ -137,8 +136,26 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h3 class="modal-title"><strong>Information</strong></h3>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" id="info">
 
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-effect-ripple btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div id="modal-tabs" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+               <?php $this->load->view('user/prescription/add/form');?>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-effect-ripple btn-danger" data-dismiss="modal">Close</button>
@@ -153,27 +170,6 @@
     });</script>
 
 <script type="text/javascript">
-    $(document).ready(function () {
-        var max_fields = 10; //maximum input boxes allowed
-        var wrapper = $(".input_fields_wrap"); //Fields wrapper
-        var add_button = $(".add_field_button"); //Add button ID
-
-        var x = 1; //initlal text box count
-        $(add_button).click(function (e) { //on add input button click
-            e.preventDefault();
-            if (x < max_fields) { //max input box allowed
-                x++; //text box increment
-                $(wrapper).append('<div><label class="col-md-4 control-label" for="medicine">Medicine <span class="text-danger">*</span></label><div class="col-md-6"><div class="input-group"><input type="text" id="medicine" name="medicine[]" class="form-control" placeholder="Enter Medicine name here" required><span class="input-group-addon"><i class="fa fa-medkit"></i></span></div></div><label class="col-md-4 control-label" for="dose">Dose <span class="text-danger">*</span></label><div class="col-md-6"><div class="input-group"><input type="text" id="dose" name="dose[]" class="form-control" placeholder="Enter Dose" required><span class="input-group-addon"><i class="gi gi-pot"></i></span></div></div><div class="col-md-2 remove_field"><a href=""><i class="fa fa-minus"></i></a></div></div>'); //add input box
-            }
-        });
-
-        $(wrapper).on("click", ".remove_field", function (e) { //user click on remove text
-            e.preventDefault();
-            $(this).parent('div').remove();
-            x--;
-        })
-    });
-
     $("#patient").change(function(event){
         var id = $(this).val();
         $.ajax({
@@ -207,15 +203,9 @@
     $(function() {
         $('a.view-modal').click(function (e) {
             var info = $(this).attr('data-info');
-            $('.modal-body').html(info);
+            $('#info').html(info);
         });
     });
-
-    function popup(){
-        var myWindow = [];
-        var add_pres = "<?php echo base_url('user/prescription/add');?>" ;
-        myWindow.push(window.open(add_pres,'AddPrescription'+new Date().getTime(),'height=700,width=850,left=350,top=30,fullscreen=no,titlebar=0,resizable=1,scrollbars=1,toolbar=no,menubar=0,location=0,directories=0,status=0'));
-    }
 
 </script>
 

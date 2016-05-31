@@ -4,7 +4,7 @@
         <div class="container">
             <div class="row">
                 <!--Foot widget-->
-                <div class="col-xs-12 col-sm-6 col-md-3 foot-widget">
+                <div class="col-xs-12 col-sm-6 col-md-3 foot-widget" style="margin-top: 20px;">
 
                     <address class="foot-address">
                         <div class="col-xs-12 no-pad"><i
@@ -33,8 +33,24 @@
                             </li>
                         </ul>
                     </div>
+<!--                    <div class="clearfix"></div>-->
+<!--                    <div id="fb-root"></div>-->
+<!--                    <div class="fb-like" data-href="--><?php //echo $site_infos['facebook_link']; ?><!--" style="margin-top: 20px;" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>-->
 
                 </div>
+
+                <div class="col-xs-12 col-sm-6 col-md-6 foot-widget">
+                    <div class="fb-page" data-href="<?php echo $site_infos['facebook_link']; ?>" data-width="600px"
+                         data-height="280" data-small-header="true" data-adapt-container-width="true"
+                         data-hide-cover="true" data-show-facepile="true" data-show-posts="true">
+                        <div class="fb-xfbml-parse-ignore">
+                            <blockquote cite="<?php echo $site_infos['facebook_link']; ?>"><a
+                                    href="<?php echo $site_infos['facebook_link']; ?>">Nurakan Technologies Pvt. Ltd.</a>
+                            </blockquote>
+                        </div>
+                    </div>
+                </div>
+
                 <!--Foot widget-->
                 <div class="col-xs-12 col-sm-6 col-md-3 recent-post-foot foot-widget">
                     <div class="foot-widget-title"><?php echo $this->lang->line('home_blog_post'); ?></div>
@@ -43,35 +59,12 @@
                         $blogs_slice = array_slice($blogs, $count - 6, 4);
                         foreach ($blogs_slice as $b) {
                             ?>
-                            <li><a href="<?php echo base_url($b['url']); ?>"><u><?php echo $b['title']; ?></u></br></a>
-                            </li>
+                            <li><a href="<?php echo base_url($b['url']); ?>" style="color: #107fc9;"><?php echo $b['title']; ?></a></li><br/>
                         <?php } ?>
                     </ul>
                 </div>
 
-                <div class="col-xs-12 col-sm-6 col-md-3 recent-tweet-foot foot-widget">
-                    <div class="foot-widget-title"><?php echo $this->lang->line('home_recent_news'); ?></div>
-                    <?php $count = count($news);
-                    $news_slice = array_slice($news, $count - 2, 2);
-                    foreach ($news_slice as $n) {
-                        $today = date('Y-m-d');
-                        $date1 = new DateTime($today);
-                        $newsdate = new DateTime(date('Y-m-d', $n['date']));
-                        $gap = $newsdate->diff($date1);
-                        ?>
-                        <ul>
-                            <li><a href="<?php echo base_url() . $n['url']; ?>"><?php echo $n['title']; ?></a> <br/>Source
-                                : <?php echo $n['news_source']; ?><br/><span
-                                    class="event-date"><?php echo $gap->days; ?>
-                                    days ago</span></li>
-                        </ul>
-                    <?php } ?>
-                </div>
 
-                <!--Foot widget-->
-                <div class="col-xs-12 col-sm-6 col-md-3 foot-widget">
-
-                </div>
 
             </div>
         </div>

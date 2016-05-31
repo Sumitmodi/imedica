@@ -351,7 +351,11 @@ class Front Extends MY_Controller
             'date' => date('Y-m-d'),
             'status' => '1',
         );
-        $this->db->insert('order', $data);
+        if($this->db->insert('order', $data)){
+            $order_id = $this->db->insert_id();
+            $order_history = array('patient_id'=>$patient_id,'order_id'=>$order_id,'order_date'=>date('Y-m-d'));
+            $this->db->insert('order_history',$order_history);
+        }
         //}
 
         $this->data['msg'] = 'Your order is successfully saved.Please check your email for verification.';

@@ -101,6 +101,27 @@ class User extends MY_Controller{
         echo json_encode($query->result_array());
     }
 
+    function order_details()
+    {
+        $pid = $_POST['pid'];
+        $this->db->select('order.*,prescribed_medicine.*')->from('order');
+        $this->db->join('prescribed_medicine','prescribed_medicine.patient=order.patient && prescribed_medicine.disease=order.disease');
+        $this->db->join('patient','patient.id=order.patient');
+        $this->db->where('order.patient',$pid);
+        $query = $this->db->get();
+        echo json_encode($query->result_array());
+    }
+
+    function order_history()
+    {
+        $pid = $_POST['pid'];
+        $this->db->select('order.*,order_history.*')->from('order');
+        $this->db->join('order_history','order_history.patient_id=order.patient && order_history.order_id=order.id');
+        $this->db->where('order.patient',$pid);
+        $query = $this->db->get();
+        echo json_encode($query->result_array());
+    }
+
     function cancel_order()
     {
         $id =$this->input->get('id');

@@ -8,7 +8,11 @@
                 <div class="subtitle col-xs-12 no-pad col-sm-11 col-md-12 pull-left news-sub"><?php echo $this->lang->line('home_latest_news');?></div>
                 <?php $count = count($news);
                 $news_slice =array_slice($news,$count-2,2);
-                foreach($news_slice as $n){?>
+                foreach($news_slice as $n){
+                    $today = date('Y-m-d');
+                    $date1 = new DateTime($today);
+                    $newsdate = new DateTime(date('Y-m-d', $n['date']));
+                    $gap = $newsdate->diff($date1);?>
                     <div class="post-item-wrap pull-left col-sm-6 col-md-12 col-xs-12">
                         <a href="<?php echo base_url().$n['url'];?>"><img src="<?php echo $n['img'];?>" class="img-responsive post-author-img" alt="" />
                             <div class="post-content1 pull-left col-md-9 col-sm-9 col-xs-8">
@@ -16,7 +20,9 @@
                                 <div class="post-meta-top pull-left">
                                     <ul>
                                         <li><i class="icon-calendar"></i><?php echo date('Y-m-d',$n['date']);?></li>
+                                        <li><?php echo $gap->days; ?> days ago</li>
                                         <li>Source : <?php echo $n['news_source'];?></li>
+
                                     </ul>
                                 </div>
                             </div>
